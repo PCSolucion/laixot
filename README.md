@@ -5,12 +5,12 @@ Laixot is a lightweight, background Windows screenshot application designed for 
 ## Features
 
 - **Background Listener**: Runs silently in the background. Press a hotkey from anywhere to start a capture.
-- **Smart Multi-Monitor Support**: Detects the monitor your cursor is on and captures only that monitor.
+- **Smart Multi-Monitor Support**: Detects the monitor your cursor is on and screenshots only that monitor.
 - **On-Screen Snipping**: Crosshair cursor with a real-time selection rectangle natively built on `tkinter`.
 - **Anti-Aliased Arrow Drawing**: Click and drag to point out elements in the screenshot. The arrow is drawn using 4x supersampling + Lanczos downscaling for perfect anti-aliasing without needing external vector libraries.
 - **Web-Optimized Size**: Saves directly to `.webp` format with `quality=75` and max encoding effort, producing incredibly small files with exceptional visual quality compared to PNG.
 - **Dynamic Watermark**: Automatically overlays `watermark.png` in the bottom right corner of the capture. The watermark scales automatically based on the captured image's width (max 80px).
-- **Auto-Increment Naming**: Automatically saves files to a `captures/` folder as `laixot_1.webp`, `laixot_2.webp`, etc., intelligently picking the next available number without relying on timestamps.
+- **Auto-Increment Naming**: Automatically saves files to a `screenshots/` folder as `laixot_1.webp`, `laixot_2.webp`, etc., intelligently picking the next available number without relying on timestamps.
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ The script will remain open in the console. You can minimize it to the backgroun
 - <kbd>Enter</kbd> (in arrow drawing phase): Save without drawing an arrow.
 - <kbd>Ctrl+C</kbd> (in console): Close the application entirely.
 
-Once a selection (and optional arrow drawing) is complete, the file will be saved directly into the `./captures/` folder as `laixot_X.webp`.
+Once a selection (and optional arrow drawing) is complete, the file will be saved directly into the `./screenshots/` folder as `laixot_X.webp`.
 
 ## Architecture Details
 

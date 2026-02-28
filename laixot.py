@@ -14,7 +14,7 @@ except Exception:
     pass
 
 WATERMARK_PATH = "watermark.png"
-OUTPUT_DIR = "captures"
+OUTPUT_DIR = "screenshots"
 
 
 def get_cursor_pos():
