@@ -2,5 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 env/
-screenshots/
+screenshots/*
+!screenshots/.gitkeep
 .DS_Store
