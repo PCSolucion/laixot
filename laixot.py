@@ -41,12 +41,14 @@ class ScreenshotApp:
         
         # Register hotkeys only once at startup
         keyboard.add_hotkey('delete', lambda: self.root.after(0, self._on_hotkey, False), suppress=True)
-        keyboard.add_hotkey('insert', lambda: self.root.after(0, self._on_hotkey, True), suppress=True)
-        print("Waiting — 'Delete': capture with arrow | 'Insert': capture without arrow | Ctrl+C: exit")
+        keyboard.add_hotkey('º', lambda: self.root.after(0, self._on_hotkey, True), suppress=True)
+        print("Waiting — 'Delete': capture with arrow | 'º': capture without arrow | Ctrl+C: exit")
 
     def _on_hotkey(self, skip_arrow):
         if self.capturing:
-            return  # Ignore if a capture is already in progress
+            # If already capturing, pressing the hotkey again cancels the process
+            self.reset_listener()
+            return
         self.capturing = True
         self.skip_arrow = skip_arrow
         self.start_capture()
@@ -75,12 +77,16 @@ class ScreenshotApp:
         self.snip_window = tk.Toplevel(self.root)
         self.snip_window.overrideredirect(True)
         self.snip_window.geometry(f"{mon_w}x{mon_h}+{mon_x}+{mon_y}")
-        self.snip_window.attributes('-alpha', 0.35)
         self.snip_window.attributes('-topmost', True)
-        self.snip_window.configure(bg="gray", cursor="cross")
+        self.snip_window.focus_force() # Ensure the window has focus for the Escape key to work
+        
+        # To "freeze" the screen and avoid brightness shifts, we show the captured image
+        self.tk_full_image = ImageTk.PhotoImage(self.full_image)
 
-        self.canvas = tk.Canvas(self.snip_window, cursor="cross", bg="gray",
+        self.canvas = tk.Canvas(self.snip_window, cursor="cross",
                                  width=mon_w, height=mon_h, highlightthickness=0)
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.tk_full_image)
         self.canvas.pack(fill="both", expand=True)
 
         self.start_x = None
@@ -230,8 +236,8 @@ class ScreenshotApp:
                 watermark = Image.open(WATERMARK_PATH).convert("RGBA")
                 bg_w, bg_h = img.size
 
-                # Proportional size: 8% of image width, bounded min/max
-                max_size = max(20, min(80, int(bg_w * 0.08)))
+                # Proportional size: 6% of image width (reduced by 25%), bounded min/max
+                max_size = max(15, min(60, int(bg_w * 0.06)))
                 watermark.thumbnail((max_size, max_size), Image.LANCZOS)
                 wm_w, wm_h = watermark.size
 
@@ -254,9 +260,9 @@ class ScreenshotApp:
                 break
             counter += 1
             
-        # quality=75 -> web standard, "visually lossless" but smaller size
+        # quality=90 -> high quality, larger file size than 75 but better clarity
         # method=6   -> max encoder effort
-        img.convert("RGB").save(filename, "webp", quality=75, method=6)
+        img.convert("RGB").save(filename, "webp", quality=90, method=6)
         print(f"✓ Saved: {filename}")
 
         self.reset_listener()
