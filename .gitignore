@@ -1,7 +1,18 @@
+# Python
 __pycache__/
 *.pyc
 .venv/
 env/
+
+# Configuración Personal
+config.json
+
+# PyInstaller / Ejecutables
+build/
+dist/
+*.spec
+
+# Capturas y Temporales
 screenshots/*
 !screenshots/.gitkeep
 .DS_Store
