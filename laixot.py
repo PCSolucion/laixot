@@ -252,10 +252,10 @@ class ScreenshotApp:
 
         os.makedirs(OUTPUT_DIR, exist_ok=True)
         
-        # Find next available number for laixot_X.webp
+        # Find next available number for captura_guia_X.webp
         counter = 1
         while True:
-            filename = os.path.join(OUTPUT_DIR, f"laixot_{counter}.webp")
+            filename = os.path.join(OUTPUT_DIR, f"captura_guia_{counter}.webp")
             if not os.path.exists(filename):
                 break
             counter += 1
