@@ -141,6 +141,9 @@ class ScreenshotApp:
         self.root.withdraw()
         self.capturing = False
         self.skip_arrow = False
+        self.arrows_history = []
+        self.snip_window = None
+        self.arrow_window = None
         
         # Register hotkeys
         try:
@@ -157,6 +160,7 @@ class ScreenshotApp:
             return
         self.capturing = True
         self.skip_arrow = skip_arrow
+        self.arrows_history = []
         self.start_capture()
 
     def start_capture(self):
@@ -286,9 +290,11 @@ class ScreenshotApp:
         self.cropped_image = big.resize((orig_w, orig_h), Image.LANCZOS)
 
     def save_result(self):
-        if hasattr(self, 'arrow_window'):
+        if not self.skip_arrow:
             self._draw_arrows_to_image()
-            self.arrow_window.destroy()
+            if self.arrow_window:
+                self.arrow_window.destroy()
+                self.arrow_window = None
         img = self.cropped_image.convert("RGBA")
         if os.path.exists(WATERMARK_PATH):
             watermark = Image.open(WATERMARK_PATH).convert("RGBA")
@@ -320,6 +326,7 @@ class ScreenshotApp:
                 try:
                     if win.winfo_exists(): win.destroy()
                 except: pass
+            setattr(self, attr, None)
         self.capturing = False
 
 def start_main_app(config):
